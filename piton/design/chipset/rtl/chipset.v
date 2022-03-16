@@ -86,6 +86,7 @@
 
 module chipset(
 
+    //output                                      io_clk,
 `ifdef F1_BOARD
     input sys_clk,
 `else

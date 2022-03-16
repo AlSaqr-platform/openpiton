@@ -25,6 +25,7 @@
 `include "define.tmp.h"
 `include "piton_system.vh"
 `include "jtag.vh"
+`define PITON_NO_CHIP_BRIDGE
 
 module chip(
 `ifndef PITON_CHIP_FPGA
