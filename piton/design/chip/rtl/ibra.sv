@@ -5,7 +5,16 @@
 `include "noc_axi4_bridge_define.vh"
 
 `define PITON_NO_CHIP_BRIDGE
-
+`define NO_SCAN
+`define USE_FAKE_PLL_AND_CLKMUX
+`define USE_FAKE_IOS
+`define PITON_ARIANE
+`define WT_DCACHE
+`define NO_MRA_VAL
+`define NO_SLAM_RANDOM
+`define RTL_ARIANE0
+`define NO_SLAM_RANDOM
+`define NO_MRA_VAL
 
 module ibra (
 
