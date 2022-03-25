@@ -132,6 +132,7 @@ wire                                       valrdy_processor_offchip_noc2_ready;
 
 wire                                       valrdy_offchip_processor_noc3_valid;
 wire  [`NOC_DATA_WIDTH-1:0]                valrdy_offchip_processor_noc3_data;
+wire  [`NOC_DATA_WIDTH-1:0]                valrdy_offchip_processor_noc3_data_1;
 wire                                       valrdy_offchip_processor_noc3_ready;
 
 
@@ -144,7 +145,7 @@ wire  [`NOC_DATA_WIDTH-1:0]                offchip_processor_noc3_data;
 wire                                       offchip_processor_noc3_yummy;
 
 
-credit_to_valrdy req_ctv(
+ibra_credit_to_valrdy req_ctv(
    .clk(core_ref_clk),
    .reset(rst_n),
    //credit based interface   
@@ -157,6 +158,8 @@ credit_to_valrdy req_ctv(
    .valid_out(valrdy_processor_offchip_noc2_valid),
    .ready_out(valrdy_processor_offchip_noc2_ready)
 );
+
+
 
 valrdy_to_credit res_vtc (
    .clk(core_ref_clk),
@@ -234,22 +237,27 @@ chip alex(
 
 );
 
+wire blablabla;
+assign blablabla = 0;
 
+
+wire blablabla_r;
+assign blablabla_r = 1;
 
 noc_axi4_bridge alex_to_alsaqr(
    // Clock + Reset
    .clk(core_ref_clk),
    .rst_n(rst_n),
-   .uart_boot_en(),
-   .phy_init_done(),
+   .uart_boot_en(0),
+   .phy_init_done(rst_n),
 
    // Noc interface
    .src_bridge_vr_noc2_val(valrdy_processor_offchip_noc2_valid),
    .src_bridge_vr_noc2_dat(valrdy_processor_offchip_noc2_data),
    .src_bridge_vr_noc2_rdy(valrdy_processor_offchip_noc2_ready),
-   .bridge_dst_vr_noc3_val(valrdy_offchip_processor_noc3_valid),
-   .bridge_dst_vr_noc3_dat(valrdy_offchip_processor_noc3_data),
-   .bridge_dst_vr_noc3_rdy(valrdy_offchip_processor_noc3_yummy),
+   .bridge_dst_vr_noc3_val(blablabla),
+   .bridge_dst_vr_noc3_dat(valrdy_offchip_processor_noc3_data_1),
+   .bridge_dst_vr_noc3_rdy(blablabla_r),
 
    // AXI interface
    .m_axi_awid(m_axi_awid),
