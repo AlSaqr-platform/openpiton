@@ -2,3 +2,5 @@ chip.v
 OCI.v
 ibra.sv
 ibra_tb.v
+test_tb_tb.sv
+creditvalrdy.sv
