@@ -1,6 +1,6 @@
 chip.v
 OCI.v
-ibra.sv
-ibra_tb.v
-test_tb_tb.sv
-creditvalrdy.sv
+cache_coherent_ariane.sv
+cache_coherent_ariane_wrapper.v
+alsaqr_valrdy_to_credit.sv
+alsaqr_credit_to_valrdy.sv
