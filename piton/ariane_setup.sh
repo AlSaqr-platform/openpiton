@@ -88,7 +88,7 @@ export CPLUS_INCLUDE_PATH=$RISCV/include:$VERILATOR_ROOT/include
 
 # source OpenPiton setup script
 # note: customize this script to reflect your tool setup
-source ./piton/piton_settings.bash
+#source ./piton/piton_settings.bash
 
 if [[ $(readlink -e "${RISCV}/bin/spike") == "" ]]
 then
