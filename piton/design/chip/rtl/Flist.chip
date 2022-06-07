@@ -1,2 +1,5 @@
 chip.v
 OCI.v
+cache_coherent_ariane.sv
+cache_coherent_ariane_wrapper.v
+
