@@ -84,7 +84,7 @@ wire [`AXI4_ADDR_WIDTH-1:0]addr_paddings = `AXI4_ADDR_WIDTH'b0;
 //==============================================================================
 
     assign m_axi_arlen    = `AXI4_LEN_WIDTH'b0; // Use only length-1 bursts
-    assign m_axi_arsize   = `AXI4_SIZE_WIDTH'b110; // Always transfer 64 bytes
+    // Always transfer 64 bytes
     assign m_axi_arburst  = `AXI4_BURST_WIDTH'b01; // fixed address in bursts (doesn't matter cause we use length-1 bursts)
     assign m_axi_arlock   = 1'b0; // Do not use locks
     assign m_axi_arcache  = `AXI4_CACHE_WIDTH'b11; // Non-cacheable bufferable requests
@@ -156,8 +156,7 @@ reg [6:0] size[`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT-1:0];
 reg [5:0] offset[`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT-1:0];
 reg [`NOC_AXI4_BRIDGE_BUFFER_ADDR_SIZE-1:0] resp_id_f;
 wire resp_go;
-wire uncacheable = (virt_addr[`PHY_ADDR_WIDTH-1]) 
-                || (req_header_f[`MSG_TYPE] == `MSG_TYPE_NC_LOAD_REQ);
+wire uncacheable = (virt_addr < 64'h80000_000) || (virt_addr > (64'h8000_0000 + 64'h20000000))  || (req_header_f[`MSG_TYPE] == `MSG_TYPE_NC_LOAD_REQ);
 
 generate begin
     genvar i;
@@ -222,8 +221,7 @@ end
 endgenerate
 
 wire [`AXI4_ADDR_WIDTH-1:0] addr = uart_boot_en ? {phys_addr[`AXI4_ADDR_WIDTH-4:0], 3'b0} : virt_addr;
-assign m_axi_araddr = {addr[`AXI4_ADDR_WIDTH-1:6], 6'b0};
-
+assign m_axi_araddr = uncacheable ? {addr[`AXI4_ADDR_WIDTH-1:6], 6'b0} + virt_addr[5:0]: {addr[`AXI4_ADDR_WIDTH-1:6], 6'b0};
 
 
 // inbound responses
@@ -321,6 +319,8 @@ always @(posedge clk) begin
         endcase // resp_state
     end 
 end
+
+assign m_axi_arsize   = uncacheable ?`AXI4_SIZE_WIDTH'b010 : `AXI4_SIZE_WIDTH'b110; 
 /*
 ila_read ila_read(
     .clk(clk), // input wire clk

@@ -29,6 +29,7 @@
 `include "define.tmp.h"
 `include "noc_axi4_bridge_define.vh"
 
+
 module noc_axi4_bridge (
     // Clock + Reset
     input  wire                                   clk,
