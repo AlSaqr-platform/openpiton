@@ -90,7 +90,6 @@ localparam GOT_RESP = 3'd1;
 //==============================================================================
 
     assign m_axi_awlen    = `AXI4_LEN_WIDTH'b0; // Use only length-1 bursts
-    assign m_axi_awsize   = `AXI4_SIZE_WIDTH'b110; // Always transfer 64 bytes
     assign m_axi_awburst  = `AXI4_BURST_WIDTH'b01; // fixed address in bursts (doesn't matter cause we use length-1 bursts)
     assign m_axi_awlock   = 1'b0; // Do not use locks
     assign m_axi_awcache  = `AXI4_CACHE_WIDTH'b11; // Non-cacheable bufferable requests
@@ -166,6 +165,7 @@ always  @(posedge clk) begin
 end
 
 
+
 // Process information here
 assign m_axi_awid = {{`AXI4_ID_WIDTH-`NOC_AXI4_BRIDGE_BUFFER_ADDR_SIZE{1'b0}}, req_id_f};
 assign m_axi_wid = {{`AXI4_ID_WIDTH-`NOC_AXI4_BRIDGE_BUFFER_ADDR_SIZE{1'b0}}, req_id_f};
@@ -239,9 +239,9 @@ always @(posedge clk) begin
     end
 end
 
-assign m_axi_awaddr = {addr[`AXI4_ADDR_WIDTH-1:6], 6'b0};
+assign m_axi_awaddr = uncacheable ? {addr[`AXI4_ADDR_WIDTH-1:6], 6'b0} + offset: {addr[`AXI4_ADDR_WIDTH-1:6], 6'b0};
 assign m_axi_wstrb = strb_before_offset << offset;
-assign m_axi_wdata = req_data_f << (8*offset);
+assign m_axi_wdata = uncacheable ? req_data_f >> 448 << (offset*8) : req_data_f;
 
 // inbound responses
 wire m_axi_bgo = m_axi_bvalid & m_axi_bready;
@@ -252,6 +252,9 @@ reg [`NOC_AXI4_BRIDGE_BUFFER_ADDR_SIZE-1:0]resp_id_f;
 
 assign resp_val = (resp_state == GOT_RESP);
 assign m_axi_bready = (resp_state == IDLE);
+
+// we have to change the size, strbs, and data
+assign m_axi_awsize   =  uncacheable ? `AXI4_SIZE_WIDTH'b010 : `AXI4_SIZE_WIDTH'b110; // Always transfer 64 bytes
 
 
 always  @(posedge clk) begin
