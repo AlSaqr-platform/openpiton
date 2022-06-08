@@ -17,6 +17,7 @@
 `define NO_MRA_VAL
 
 module cache_coherent_ariane (
+  import ariane_axi_soc::*;
 
    // IO cell configs
    input                                        slew,
@@ -70,59 +71,59 @@ module cache_coherent_ariane (
 
    // AXI interface
    // Address Write Channel
-   output wire [`AXI4_ID_WIDTH     -1:0]    m_axi_awid,
-   output wire [`AXI4_ADDR_WIDTH   -1:0]    m_axi_awaddr,
-   output wire [`AXI4_LEN_WIDTH    -1:0]    m_axi_awlen,
-   output wire [`AXI4_SIZE_WIDTH   -1:0]    m_axi_awsize,
-   output wire [`AXI4_BURST_WIDTH  -1:0]    m_axi_awburst,
-   output wire                              m_axi_awlock,
-   output wire [`AXI4_CACHE_WIDTH  -1:0]    m_axi_awcache,
-   output wire [`AXI4_PROT_WIDTH   -1:0]    m_axi_awprot,
-   output wire [`AXI4_QOS_WIDTH    -1:0]    m_axi_awqos,
-   output wire [`AXI4_REGION_WIDTH -1:0]    m_axi_awregion,
-   output wire [`AXI4_USER_WIDTH   -1:0]    m_axi_awuser,
-   output wire                              m_axi_awvalid,
-   input  wire                              m_axi_awready,
+   output wire [`AXI4_ID_WIDTH     -1:0]    axi_awid,
+   output wire [`AXI4_ADDR_WIDTH   -1:0]    axi_awaddr,
+   output wire [`AXI4_LEN_WIDTH    -1:0]    axi_awlen,
+   output wire [`AXI4_SIZE_WIDTH   -1:0]    axi_awsize,
+   output wire [`AXI4_BURST_WIDTH  -1:0]    axi_awburst,
+   output wire                              axi_awlock,
+   output wire [`AXI4_CACHE_WIDTH  -1:0]    axi_awcache,
+   output wire [`AXI4_PROT_WIDTH   -1:0]    axi_awprot,
+   output wire [`AXI4_QOS_WIDTH    -1:0]    axi_awqos,
+   output wire [`AXI4_REGION_WIDTH -1:0]    axi_awregion,
+   output wire [`AXI4_USER_WIDTH   -1:0]    axi_awuser,
+   output wire                              axi_awvalid,
+   input  wire                              axi_awready,
 
    // Write Data Channel
-   output wire  [`AXI4_ID_WIDTH     -1:0]    m_axi_wid,
-   output wire  [`AXI4_DATA_WIDTH   -1:0]    m_axi_wdata,
-   output wire  [`AXI4_STRB_WIDTH   -1:0]    m_axi_wstrb,
-   output wire                               m_axi_wlast,
-   output wire  [`AXI4_USER_WIDTH   -1:0]    m_axi_wuser,
-   output wire                               m_axi_wvalid,
-   input  wire                               m_axi_wready,
+   output wire  [`AXI4_ID_WIDTH     -1:0]    axi_wid,
+   output wire  [`AXI4_DATA_WIDTH   -1:0]    axi_wdata,
+   output wire  [`AXI4_STRB_WIDTH   -1:0]    axi_wstrb,
+   output wire                               axi_wlast,
+   output wire  [`AXI4_USER_WIDTH   -1:0]    axi_wuser,
+   output wire                               axi_wvalid,
+   input  wire                               axi_wready,
 
    // Address Read Channel
-   output wire  [`AXI4_ID_WIDTH     -1:0]    m_axi_arid,
-   output wire  [`AXI4_ADDR_WIDTH   -1:0]    m_axi_araddr,
-   output wire  [`AXI4_LEN_WIDTH    -1:0]    m_axi_arlen,
-   output wire  [`AXI4_SIZE_WIDTH   -1:0]    m_axi_arsize,
-   output wire  [`AXI4_BURST_WIDTH  -1:0]    m_axi_arburst,
-   output wire                               m_axi_arlock,
-   output wire  [`AXI4_CACHE_WIDTH  -1:0]    m_axi_arcache,
-   output wire  [`AXI4_PROT_WIDTH   -1:0]    m_axi_arprot,
-   output wire  [`AXI4_QOS_WIDTH    -1:0]    m_axi_arqos,
-   output wire  [`AXI4_REGION_WIDTH -1:0]    m_axi_arregion,
-   output wire  [`AXI4_USER_WIDTH   -1:0]    m_axi_aruser,
-   output wire                               m_axi_arvalid,
-   input  wire                               m_axi_arready,
+   output wire  [`AXI4_ID_WIDTH     -1:0]    axi_arid,
+   output wire  [`AXI4_ADDR_WIDTH   -1:0]    axi_araddr,
+   output wire  [`AXI4_LEN_WIDTH    -1:0]    axi_arlen,
+   output wire  [`AXI4_SIZE_WIDTH   -1:0]    axi_arsize,
+   output wire  [`AXI4_BURST_WIDTH  -1:0]    axi_arburst,
+   output wire                               axi_arlock,
+   output wire  [`AXI4_CACHE_WIDTH  -1:0]    axi_arcache,
+   output wire  [`AXI4_PROT_WIDTH   -1:0]    axi_arprot,
+   output wire  [`AXI4_QOS_WIDTH    -1:0]    axi_arqos,
+   output wire  [`AXI4_REGION_WIDTH -1:0]    axi_arregion,
+   output wire  [`AXI4_USER_WIDTH   -1:0]    axi_aruser,
+   output wire                               axi_arvalid,
+   input  wire                               axi_arready,
 
    // Read Data Channel
-   input  wire  [`AXI4_ID_WIDTH     -1:0]    m_axi_rid,
-   input  wire  [`AXI4_DATA_WIDTH   -1:0]    m_axi_rdata,
-   input  wire  [`AXI4_RESP_WIDTH   -1:0]    m_axi_rresp,
-   input  wire                               m_axi_rlast,
-   input  wire  [`AXI4_USER_WIDTH   -1:0]    m_axi_ruser,
-   input  wire                               m_axi_rvalid,
-   output wire                               m_axi_rready,
+   input  wire  [`AXI4_ID_WIDTH     -1:0]    axi_rid,
+   input  wire  [`AXI4_DATA_WIDTH   -1:0]    axi_rdata,
+   input  wire  [`AXI4_RESP_WIDTH   -1:0]    axi_rresp,
+   input  wire                               axi_rlast,
+   input  wire  [`AXI4_USER_WIDTH   -1:0]    axi_ruser,
+   input  wire                               axi_rvalid,
+   output wire                               axi_rready,
 
    // Ack Channel
-   input  wire  [`AXI4_ID_WIDTH     -1:0]    m_axi_bid,
-   input  wire  [`AXI4_RESP_WIDTH   -1:0]    m_axi_bresp,
-   input  wire  [`AXI4_USER_WIDTH   -1:0]    m_axi_buser,
-   input  wire                               m_axi_bvalid,
-   output wire                               m_axi_bready
+   input  wire  [`AXI4_ID_WIDTH     -1:0]    axi_bid,
+   input  wire  [`AXI4_RESP_WIDTH   -1:0]    axi_bresp,
+   input  wire  [`AXI4_USER_WIDTH   -1:0]    axi_buser,
+   input  wire                               axi_bvalid,
+   output wire                               axi_bready
 );
 
 
@@ -143,7 +144,13 @@ wire                                       offchip_processor_noc3_valid;
 wire  [`NOC_DATA_WIDTH-1:0]                offchip_processor_noc3_data;
 wire                                       offchip_processor_noc3_yummy;
 
+ariane_axi_soc::req_t    m_axi_ariane_req;
+ariane_axi_soc::resp_t   m_axi_ariane_resp;
 
+ariane_axi_soc::req_t    s_axi_ariane_req;
+ariane_axi_soc::resp_t   s_axi_ariane_resp;
+
+wire [4:0] dump_wid;
 alsaqr_credit_to_valrdy req_credit_to_valrdy(
    .clk(core_ref_clk),
    .reset(rst_n),
@@ -253,57 +260,89 @@ noc_axi4_bridge noc_axi_bridge(
    .bridge_dst_vr_noc3_dat(valrdy_offchip_processor_noc3_data),
    .bridge_dst_vr_noc3_rdy(valrdy_offchip_processor_noc3_ready),
 
-   // AXI interface
-   .m_axi_awid(m_axi_awid),
-   .m_axi_awaddr(m_axi_awaddr),
-   .m_axi_awlen(m_axi_awlen),
-   .m_axi_awsize(m_axi_awsize),
-   .m_axi_awburst(m_axi_awburst),
-   .m_axi_awlock(m_axi_awlock),
-   .m_axi_awcache(m_axi_awcache),
-   .m_axi_awprot(m_axi_awprot),
-   .m_axi_awqos(m_axi_awqos),
-   .m_axi_awregion(m_axi_awregion),
-   .m_axi_awuser(m_axi_awuser),
-   .m_axi_awvalid(m_axi_awvalid),
-   .m_axi_awready(m_axi_awready),
+  // AXI interface
+  .m_axi_awid(m_axi_ariane_req.aw.id),
+  .m_axi_awaddr(m_axi_ariane_req.aw.addr),
+  .m_axi_awlen(m_axi_ariane_req.aw.len),
+  .m_axi_awsize(m_axi_ariane_req.aw.size),
+  .m_axi_awburst(m_axi_ariane_req.aw.burst),
+  .m_axi_awlock(m_axi_ariane_req.aw.lock ),
+  .m_axi_awcache(m_axi_ariane_req.aw.cache),
+  .m_axi_awprot(m_axi_ariane_req.aw.prot),
+  .m_axi_awqos(m_axi_ariane_req.aw.qos ),
+  .m_axi_awregion(m_axi_ariane_req.aw.region),
+  .m_axi_awuser(m_axi_ariane_req.aw.user),
+  .m_axi_awvalid(m_axi_ariane_req.aw_valid),
+  .m_axi_awready(m_axi_ariane_resp.aw_ready),
 
-   .m_axi_wid(m_axi_wid),
-   .m_axi_wdata(m_axi_wdata),
-   .m_axi_wstrb(m_axi_wstrb),
-   .m_axi_wlast(m_axi_wlast),
-   .m_axi_wuser(m_axi_wuser),
-   .m_axi_wvalid(m_axi_wvalid),
-   .m_axi_wready(m_axi_wready),
+  .m_axi_wid(dump_wid),
+  .m_axi_wdata(m_axi_ariane_req.w.data),
+  .m_axi_wstrb(m_axi_ariane_req.w.strb),
+  .m_axi_wlast(m_axi_ariane_req.w.last),
+  .m_axi_wuser(m_axi_ariane_req.w.user),
+  .m_axi_wvalid(m_axi_ariane_req.w_valid),
+  .m_axi_wready(m_axi_ariane_resp.w_ready),
 
-   .m_axi_arid(m_axi_arid),
-   .m_axi_araddr(m_axi_araddr),
-   .m_axi_arlen(m_axi_arlen),
-   .m_axi_arsize(m_axi_arsize),
-   .m_axi_arburst(m_axi_arburst),
-   .m_axi_arlock(m_axi_arlock),
-   .m_axi_arcache(m_axi_arcache),
-   .m_axi_arprot(m_axi_arprot),
-   .m_axi_arqos(m_axi_arqos),
-   .m_axi_arregion(m_axi_arregion),
-   .m_axi_aruser(m_axi_aruser),
-   .m_axi_arvalid(m_axi_arvalid),
-   .m_axi_arready(m_axi_arready),
+  .m_axi_arid(m_axi_ariane_req.ar.id),
+  .m_axi_araddr(m_axi_ariane_req.ar.addr),
+  .m_axi_arlen(m_axi_ariane_req.ar.len),
+  .m_axi_arsize(m_axi_ariane_req.ar.size ),
+  .m_axi_arburst(m_axi_ariane_req.ar.burst),
+  .m_axi_arlock(m_axi_ariane_req.ar.lock),
+  .m_axi_arcache(m_axi_ariane_req.ar.cache),
+  .m_axi_arprot(m_axi_ariane_req.ar.prot),
+  .m_axi_arqos(m_axi_ariane_req.ar.qos),
+  .m_axi_arregion(m_axi_ariane_req.ar.region),
+  .m_axi_aruser(m_axi_ariane_req.ar.user),
+  .m_axi_arvalid(m_axi_ariane_req.ar_valid),
+  .m_axi_arready(m_axi_ariane_resp.ar_ready),
 
-   .m_axi_rid(m_axi_rid),
-   .m_axi_rdata(m_axi_rdata),
-   .m_axi_rresp(m_axi_rresp),
-   .m_axi_rlast(m_axi_rlast),
-   .m_axi_ruser(m_axi_ruser),
-   .m_axi_rvalid(m_axi_rvalid),
-   .m_axi_rready(m_axi_rready),
+  .m_axi_rid(m_axi_ariane_resp.r.id),
+  .m_axi_rdata(m_axi_ariane_resp.r.data),
+  .m_axi_rresp(m_axi_ariane_resp.r.resp),
+  .m_axi_rlast(m_axi_ariane_resp.r.last),
+  .m_axi_ruser(m_axi_ariane_resp.r.user),
+  .m_axi_rvalid(m_axi_ariane_resp.r_valid),
+  .m_axi_rready(m_axi_ariane_req.r_ready),
 
-   .m_axi_bid(m_axi_bid),
-   .m_axi_bresp(m_axi_bresp),
-   .m_axi_buser(m_axi_buser),
-   .m_axi_bvalid(m_axi_bvalid),
-   .m_axi_bready(m_axi_bready)
+  .m_axi_bid(m_axi_ariane_resp.b.id),
+  .m_axi_bresp(m_axi_ariane_resp.b.resp),
+  .m_axi_buser(m_axi_ariane_resp.b.user),
+  .m_axi_bvalid(m_axi_ariane_resp.b_valid),
+  .m_axi_bready(m_axi_ariane_req.b_ready)
 
 );
+
+
+
+
+axi_dw_converter size_converter#(
+    AxiMaxReads         = 1    , // Number of outstanding reads
+    AxiSlvPortDataWidth = 64    , // Data width of the slv port
+    AxiMstPortDataWidth = 512    , // Data width of the mst port
+    AxiAddrWidth        = 64    , // Address width
+    AxiIdWidth          = 5    , // ID width
+    aw_chan_t                   = ariane_axi_soc::aw_chan_t, // AW Channel Type
+    mst_w_chan_t                = ariane_axi_soc::w_chan_t, //  W Channel Type for the mst port
+    slv_w_chan_t                = ariane_axi_soc::w_chan_t, //  W Channel Type for the slv port
+    b_chan_t                    = ariane_axi_soc::b_chan_t, //  B Channel Type
+    ar_chan_t                   = ariane_axi_soc::ar_chan_t, // AR Channel Type
+    mst_r_chan_t                = ariane_axi_soc::r_chan_t, //  R Channel Type for the mst port
+    slv_r_chan_t                = ariane_axi_soc::r_chan_t, //  R Channel Type for the slv port
+    axi_mst_req_t               = ariane_axi_soc::req_t, // AXI Request Type for mst ports
+    axi_mst_resp_t              = ariane_axi_soc::resp_t, // AXI Response Type for mst ports
+    axi_slv_req_t               = ariane_axi_soc::req_t, // AXI Request Type for slv ports
+    axi_slv_resp_t              = ariane_axi_soc::resp_t  // AXI Response Type for slv ports
+  ) (
+    .clk_i(core_ref_clk),
+    .rst_ni(rst_n),
+    // Slave interface
+    .slv_req_i(s_axi_ariane_req),
+    .slv_resp_o(s_axi_ariane_resp),
+    // Master interface
+    .mst_req_o(m_axi_ariane_req),
+    .mst_resp_i(m_axi_ariane_resp)
+);
+
 
 endmodule

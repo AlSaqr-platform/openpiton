@@ -66,6 +66,7 @@ always @(posedge clk) begin
             ready_in   <= 0;
             valid_out <= 1;
             data_out    <= mybuffer[outCounter];
+            outCounter <= outCounter +1;
          end
          else begin
             msgCounter              <= msgCounter + 1;
@@ -77,21 +78,17 @@ always @(posedge clk) begin
       begin 
          data_out    <= mybuffer[outCounter];
          valid_out   <= 1;
-         if (yummy_out == 0)
+         if (msgCounter > 1 ) begin
                State <= 2;
-         else begin
-            if (msgCounter > 1) begin
-               State       <= 2;
-               msgCounter  <= msgCounter - 1;
                outCounter  <= outCounter + 1;
-            end
-            else begin
+               msgCounter  <= msgCounter - 1;  
+         end
+         else begin
                State       <= 0;
                msgCounter  <= 0;
                valid_out   <= 0;
                outCounter  <= 0;
                ready_in    <= 1;
-            end
          end
       end
     endcase

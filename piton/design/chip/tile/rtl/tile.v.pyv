@@ -1031,7 +1031,7 @@ bootAddr = cacheBase
 if romIsPresent:
   bootAddr = romBase
 
-print("    assign ariane_bootaddr  =  64'h%s;" % bootAddr)
+print("    assign ariane_bootaddr  =  64'h8000_0000;")
 %>
 
 
