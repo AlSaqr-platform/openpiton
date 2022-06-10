@@ -1,3 +1,6 @@
 [submodule "aws"]
 	path = piton/design/aws
 	url = https://github.com/PrincetonUniversity/openpiton-aws.git
+[submodule "piton/design/chip/tile/ariane"]
+	path = piton/design/chip/tile/ariane
+	url = https://github.com/alaasal/cva6.git
