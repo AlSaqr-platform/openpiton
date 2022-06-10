@@ -1263,7 +1263,7 @@ sub pre_build
     # 2 targets per core (M/S mode)
     my $num_targets = 2 * $ENV{PTON_NUM_TILES};
     print "generating PLIC for Ariane with $num_targets targets and $num_sources sources...\n";
-    !system("cd $ENV{ARIANE_ROOT}/src/rv_plic/rtl && ./gen_plic_addrmap.py -t $num_targets -s $num_sources > plic_regmap.sv") or
+    !system("cd $ENV{ARIANE_ROOT}corev_apu/rv_plic/rtl/ && ./gen_plic_addrmap.py -t $num_targets -s $num_sources > plic_regmap.sv") or
       die (" Error generating PLIC for Ariane.");
     print "done\n";
   }
