@@ -158,6 +158,9 @@ reg [`NOC_AXI4_BRIDGE_BUFFER_ADDR_SIZE-1:0] resp_id_f;
 wire resp_go;
 wire uncacheable = (virt_addr < 64'h80000_000) || (virt_addr > (64'h8000_0000 + 64'h20000000))  || (req_header_f[`MSG_TYPE] == `MSG_TYPE_NC_LOAD_REQ);
 
+wire uart_range;
+assign uart_range = (virt_addr >= 64'h4000_0000 && virt_addr <= 64'h4000_1000);
+
 generate begin
     genvar i;
     for (i = 0; i < `NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i = i + 1) begin
@@ -170,7 +173,8 @@ generate begin
                 if ((i == req_id_f) && m_axi_argo) begin
                     if (uncacheable) begin
                         offset[i] <= virt_addr[5:0];
-                        case (req_header_f[`MSG_DATA_SIZE])
+                        size[i]   <= (uart_range) ? 7'd4 : 7'd8;
+/*                        case (req_header_f[`MSG_DATA_SIZE])
                             `MSG_DATA_SIZE_0B: begin
                                 size[i] <= 7'd0;
                             end
@@ -199,7 +203,7 @@ generate begin
                                 // should never end up here
                                 size[i] <= 7'b0;
                             end
-                        endcase
+                        endcase  */
                     end
                     else begin
                         offset[i] <= 6'b0;
@@ -320,7 +324,8 @@ always @(posedge clk) begin
     end 
 end
 
-assign m_axi_arsize   = uncacheable ?`AXI4_SIZE_WIDTH'b010 : `AXI4_SIZE_WIDTH'b110; 
+assign m_axi_arsize = (uncacheable) ? ( (uart_range) ? `AXI4_SIZE_WIDTH'b010 : `AXI4_SIZE_WIDTH'b011) : `AXI4_SIZE_WIDTH'b110;
+                               
 /*
 ila_read ila_read(
     .clk(clk), // input wire clk
