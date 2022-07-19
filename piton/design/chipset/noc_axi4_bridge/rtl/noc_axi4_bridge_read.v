@@ -129,14 +129,15 @@ always  @(posedge clk) begin
             end
         endcase
     end
-end
+end // always  @ (posedge clk)
+   
 
 
 // Process information here
-assign m_axi_arid = {{`AXI4_ID_WIDTH-`NOC_AXI4_BRIDGE_BUFFER_ADDR_SIZE{1'b0}}, req_id_f};
-
-wire [`PHY_ADDR_WIDTH-1:0] virt_addr = req_header_f[`MSG_ADDR];
-wire [`AXI4_ADDR_WIDTH-1:0] phys_addr;
+   assign m_axi_arid = {{`AXI4_ID_WIDTH-`NOC_AXI4_BRIDGE_BUFFER_ADDR_SIZE{1'b0}}, req_id_f};
+   
+   wire [`PHY_ADDR_WIDTH-1:0] virt_addr = req_header_f[`MSG_ADDR];
+   wire [`AXI4_ADDR_WIDTH-1:0] phys_addr;
 
 // If running uart tests - we need to do address translation
 `ifdef PITONSYS_UART_BOOT
@@ -150,7 +151,7 @@ storage_addr_trans #(
     .storage_addr_out   (phys_addr  )
 );
 
-
+                
 // Have to save request size and offset to process data later
 reg [6:0] size[`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT-1:0];
 reg [5:0] offset[`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT-1:0];
@@ -160,21 +161,20 @@ wire uncacheable = (virt_addr < 64'h80000_000) || (virt_addr > (64'h8000_0000 + 
 
 wire uart_range;
 assign uart_range = (virt_addr >= 64'h4000_0000 && virt_addr <= 64'h4000_1000);
-
+/*
+genvar i;
 generate begin
-    genvar i;
-    for (i = 0; i < `NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i = i + 1) begin
+for (i = 0; i < `NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i++) begin
         always @(posedge clk) begin
             if(~rst_n) begin
                 size[i] <= 7'b0;
                 offset[i] <= 6'b0;
-            end 
-            else begin
+            end else begin                               
                 if ((i == req_id_f) && m_axi_argo) begin
                     if (uncacheable) begin
                         offset[i] <= virt_addr[5:0];
                         size[i]   <= (uart_range) ? 7'd4 : 7'd8;
-/*                        case (req_header_f[`MSG_DATA_SIZE])
+                        case (req_header_f[`MSG_DATA_SIZE])
                             `MSG_DATA_SIZE_0B: begin
                                 size[i] <= 7'd0;
                             end
@@ -203,30 +203,55 @@ generate begin
                                 // should never end up here
                                 size[i] <= 7'b0;
                             end
-                        endcase  */
-                    end
-                    else begin
+                        endcase
+                    end else begin
                         offset[i] <= 6'b0;
                         size[i] <= 7'd64;
-                    end
-                end
-                else if ((i == resp_id_f) & resp_go) begin
+                    end // else: !if(uncacheable)
+                 end // if ((i == req_id_f) && m_axi_argo)                               
+                 else if ((i == resp_id_f) & resp_go) begin
                     size[i] <= 7'b0;
                     offset[i] <= 7'b0;
-                end
-                else begin
+                 end
+                 else begin
                     size[i] <= size[i];
                     offset[i] <= offset[i];
-                end
-            end
-        end
-    end
-end
+                 end
+              end // else: !if(~rst_n)
+           end // always @ (posedge clk)                               
+    end // for (i = 0; i < `NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i = i + 1)                                                             
 endgenerate
+*/
+
+always @(posedge clk) begin
+    if(~rst_n) begin
+        for (int i=0; i<`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i++) begin
+            size[i] <= 7'b0;
+            offset[i] <= 6'b0;
+        end
+    end else begin
+        for (int i=0; i<`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i++) begin
+            if ((i == req_id_f) && m_axi_argo) begin
+                if (uncacheable) begin
+                    offset[i] <= virt_addr[5:0];
+                    size[i]   <= (uart_range) ? 7'd4 : 7'd8;
+                end else begin
+                    offset[i] <= 6'b0;
+                    size[i] <= 7'd64;
+                end // else: !if(uncacheable)
+            end else if ((i == resp_id_f) & resp_go) begin
+                size[i] <= 7'b0;
+                offset[i] <= 7'b0;
+            end else begin
+                size[i] <= size[i];
+                offset[i] <= offset[i];
+            end
+        end // for (int i=0; i<`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i++)                       
+    end // always @ (posedge clk)
+end // for (i = 0; i < `NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i = i + 1)                                                                                            
 
 wire [`AXI4_ADDR_WIDTH-1:0] addr = uart_boot_en ? {phys_addr[`AXI4_ADDR_WIDTH-4:0], 3'b0} : virt_addr;
 assign m_axi_araddr = uncacheable ? {addr[`AXI4_ADDR_WIDTH-1:6], 6'b0} + virt_addr[5:0]: {addr[`AXI4_ADDR_WIDTH-1:6], 6'b0};
-
 
 // inbound responses
 

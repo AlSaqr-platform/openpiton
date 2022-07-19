@@ -57,14 +57,10 @@ assign clk_out = ref_clk;
 assign clk_locked = ~rst;
 
 `elsif USE_FAKE_PLL_AND_CLKMUX
-
-// Non synthesizeable simulation PLL
-fake_pll pll (
-    .clk_locked(clk_locked),
-    .clk_out(clk_out),
-    .ref_clk(ref_clk),
-    .rst(rst)
-);
+ 
+// FIX FOR SYNTHESYS
+assign clk_out = ref_clk;
+assign clk_locked = ~rst;
 
 `else
 

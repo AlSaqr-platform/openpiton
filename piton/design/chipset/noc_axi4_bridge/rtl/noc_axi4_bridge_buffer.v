@@ -154,7 +154,7 @@ noc_axi4_bridge_sram_data noc_axi4_bridge_sram_data
 (
     .MEMCLK(clk), 
     .RESET_N(rst_n),
-    .CEA(1),
+    .CEA(1'b1),
     .AA(write_req_id),
     .RDWENA(1'b1),
     .CEB(deser_go),
@@ -193,7 +193,7 @@ noc_axi4_bridge_sram_req noc_axi4_bridge_sram_req
 (
     .MEMCLK(clk), 
     .RESET_N(rst_n),
-    .CEA(1),
+    .CEA(1'b1),
     .AA(preser_arb ? write_resp_id : read_resp_id),
     .RDWENA(1'b1),
     .CEB(req_go),

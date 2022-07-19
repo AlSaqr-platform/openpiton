@@ -6,7 +6,7 @@
 
 `define PITON_NO_CHIP_BRIDGE
 `define NO_SCAN
-`define USE_FAKE_PLL_AND_CLKMUX
+//`define USE_FAKE_PLL_AND_CLKMUX
 `define USE_FAKE_IOS
 `define PITON_ARIANE
 `define WT_DCACHE
@@ -242,7 +242,7 @@ noc_axi4_bridge noc_axi_bridge(
    // Clock + Reset
    .clk(core_ref_clk),
    .rst_n(rst_n),
-   .uart_boot_en(0),
+   .uart_boot_en(1'b0),
    .phy_init_done(rst_n),
 
    // Noc interface
