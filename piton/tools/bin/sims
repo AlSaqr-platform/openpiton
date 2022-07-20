@@ -24,7 +24,7 @@
 #  SCCS ID: @(#).local_tool_wrapper	1.1 02/03/99
 #
 #  Cloned from .common_tool_wrapper
-
+set -x
 loginfo () {
     echo "DATE:              "`date`
     echo "WRAPPER:           $TRE_PROJECT/local_tool_wrapper"

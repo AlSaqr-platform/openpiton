@@ -222,15 +222,15 @@ for (i = 0; i < `NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i++) begin
     end // for (i = 0; i < `NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i = i + 1)                                                             
 endgenerate
 */
-
+integer i;
 always @(posedge clk) begin
     if(~rst_n) begin
-        for (int i=0; i<`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i++) begin
+        for (i=0; i<`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i = i + 1) begin
             size[i] <= 7'b0;
             offset[i] <= 6'b0;
         end
     end else begin
-        for (int i=0; i<`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i++) begin
+        for (i=0; i<`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT; i = i + 1) begin
             if ((i == req_id_f) && m_axi_argo) begin
                 if (uncacheable) begin
                     offset[i] <= virt_addr[5:0];

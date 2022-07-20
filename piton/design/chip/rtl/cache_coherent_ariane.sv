@@ -187,42 +187,12 @@ chip ariane_core_chip(
    .offchip_processor_noc3_data(offchip_processor_noc3_data),
    .offchip_processor_noc3_yummy(offchip_processor_noc3_yummy),
 
-   // IO cell configs
-   .slew(slew),
-   .impsel1(impsel1),
-   .impsel2(impsel2),
-
    // Input clocks
    .core_ref_clk(core_ref_clk),
-   .io_clk(io_clk),
 
    // Resets
    // reset is assumed to be asynchronous
    .rst_n(rst_n),
-
-   .pll_rst_n(pll_rst_n),
-
-   // Chip-level clock enable
-   .clk_en(clk_en),
-
-   // PLL settings
-   .pll_lock(pll_lock),
-   .pll_bypass(pll_bypass),
-   .pll_rangea(pll_rangea),
-
-   // Clock mux select (bypass PLL or not)
-   // Double redundancy with pll_bypass
-   .clk_mux_sel(clk_mux_sel),
-
-   // JTAG
-   .jtag_clk(jtag_clk),
-   .jtag_rst_l(jtag_rst_l),
-   .jtag_modesel(jtag_modesel),
-   .jtag_datain(jtag_datain),
-   .jtag_dataout(jtag_dataout),
-
-   // Async FIFOs enable
-   .async_mux(async_mux),
 
    // Debug
    .ndmreset_i(ndmreset_i),    // non-debug module reset

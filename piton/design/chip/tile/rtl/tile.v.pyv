@@ -56,11 +56,6 @@ module tile #(
     input wire [`NOC_Y_WIDTH-1:0]       default_coreid_y,
     input wire [`JTAG_FLATID_WIDTH-1:0] flat_tileid,
 
-    // UCB interface for test access port
-    input                               jtag_tiles_ucb_val,
-    input [`UCB_BUS_WIDTH-1:0]          jtag_tiles_ucb_data,
-    output                              tile_jtag_ucb_val,
-    output [`UCB_BUS_WIDTH-1:0]         tile_jtag_ucb_data,
 <%
 s = '''
     // Dynamic Network Inputs 0 (User Dynamic Network)
@@ -1293,40 +1288,20 @@ print(str)
                                 | sparc_rtap_data
                                 | l2_rtap_data;
 
-
-    rtap rtap(
-        .clk(clk_gated),
-        .rst_n(rst_n_f),
-        .own_tileid(flat_tileid),
-
-        // UCB bus interface
-        .tile_jtag_ucb_val(tile_jtag_ucb_val),
-        .tile_jtag_ucb_data(tile_jtag_ucb_data),
-        .jtag_tiles_ucb_val(jtag_tiles_ucb_val),
-        .jtag_tiles_ucb_data(jtag_tiles_ucb_data),
-
-        // interface to srams
-        .srams_rtap_data (srams_rtap_data),
-        .rtap_srams_bist_command (rtap_srams_bist_command),
-        .rtap_srams_bist_data (rtap_srams_bist_data),
-
-        // insert interrupt packets for jtag
-        .rtap_arb_req_val (rtap_arb_req_val),
-        .rtap_arb_req_data (rtap_arb_req_data),
-        .rtap_arb_req_threadid (rtap_arb_req_threadid),
-
-        // jtag-config_regs interface
-        .rtap_config_req_val (rtap_config_req_val),
-        .rtap_config_req_rw (rtap_config_req_rw),
-        .rtap_config_write_req_data (rtap_config_write_req_data),
-        .rtap_config_req_address (rtap_config_req_address),
-        .config_rtap_read_res_data (config_rtap_read_res_data),
-
-        .core_rtap_data          (core_rtap_data),
-        .rtap_core_val         (rtap_core_val),
-        .rtap_core_threadid         (rtap_core_threadid),
-        .rtap_core_id         (rtap_core_id),
-        .rtap_core_data         (rtap_core_data)
-        );
+assign tile_jtag_ucb_val            = '0;
+assign tile_jtag_ucb_data           = '0;
+assign rtap_srams_bist_command      = '0;
+assign rtap_srams_bist_data         = '0;
+assign rtap_arb_req_val             = '0;
+assign rtap_arb_req_data            = '0;
+assign rtap_arb_req_threadid        = '0;
+assign rtap_config_req_val          = '0;
+assign rtap_config_req_rw           = '0;
+assign rtap_config_write_req_data   = '0;
+assign rtap_config_req_address      = '0;
+assign rtap_core_val                = '0;
+assign rtap_core_threadid           = '0;
+assign rtap_core_id                 = '0;
+assign rtap_core_data               = '0;
 
 endmodule
