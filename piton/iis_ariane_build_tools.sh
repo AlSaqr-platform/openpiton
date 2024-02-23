@@ -92,6 +92,11 @@ else
   make isa        -j${NUM_JOBS} > /dev/null
   make benchmarks -j${NUM_JOBS} > /dev/null
   make install
+
+  cp ${PITON_ROOT}/piton/boot-make.patch ${PITON_ROOT}/design/chip/tile/ariane
+  cd ${PITON_ROOT}/design/chip/tile/ariane
+  git apply boot-make.patch
+
   cd ${PITON_ROOT}
 
   echo
