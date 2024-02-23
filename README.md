@@ -515,3 +515,16 @@ The following items are currently under development and will be released soon.
 - Performance enhancements (cache re-parameterization, write-buffer throughput).
 
 Stay tuned!
+
+#### IIS instructions
+
+```
+source piton/iis_ariane_setup.sh
+source piton/iis_ariane_build_tools.sh
+
+sims -sys=manycore -x_tiles=2 -y_tiles=1 -msm_build -ariane
+sims -sys=manycore -msm_run -x_tiles=2 -y_tiles=1 hello_world_many.c -ariane -finish_mask 0x1111111111111111 -rtl_timeout 1000000
+
+source /usr/pack/vitis-2020.2-kgf/Vivado/2020.2/settings64.sh
+protosyn -b genesys2 -d system --core=ariane --uart-dmw ddr --x_tiles=2
+```
