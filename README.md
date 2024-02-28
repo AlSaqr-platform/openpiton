@@ -505,3 +505,15 @@ The command will tell print the afi and agfi of your image. You can track the sy
 
 8. After the synthesis is done - you can go load it in your F1 instance!
 
+#### IIS instructions
+
+```
+source piton/iis_ariane_setup.sh
+source piton/iis_ariane_build_tools.sh
+
+sims -sys=manycore -x_tiles=2 -y_tiles=1 -msm_build -ariane
+sims -sys=manycore -msm_run -x_tiles=2 -y_tiles=1 hello_world_many.c -ariane -finish_mask 0x1111111111111111 -rtl_timeout 1000000
+
+source /usr/pack/vitis-2020.2-kgf/Vivado/2020.2/settings64.sh
+protosyn -b genesys2 -d system --core=ariane --uart-dmw ddr --x_tiles=2
+```
